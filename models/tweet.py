@@ -17,9 +17,16 @@ class CreateTweet(BaseModel):
         min_lenght = 1,
         max_lenght = 256,
     )
-    created_at : datetime = Field(default = datetime.now())
-    updated_at : Optional[datetime] = Field(default = None)
-    by : User = Field(...)
+    by : UUID = Field(...)
+
+class UpdateTweet(BaseModel):
+    content : str = Field(
+        ...,
+        min_lenght = 1,
+        max_lenght = 256,
+    )
 
 class Tweet(CreateTweet):
+    created_at : datetime = Field(default = datetime.now())
+    updated_at : Optional[datetime] = Field(default = None)
     tweet_id : UUID = Field(...)

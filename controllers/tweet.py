@@ -75,6 +75,8 @@ def post_tweet(
         results = json.load(f)
         tweet_dict = tweet.dict()
         tweet_dict["tweet_id"] = uuid4()
+        tweet_dict["created_at"] = datetime.now()
+        tweet_dict["updated_at"] = tweet_dict["created_at"]
         results.append(tweet_dict)
         f.seek(0)
         json.dump(results, f, indent=2, default=str)
