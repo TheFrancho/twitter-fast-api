@@ -17,7 +17,7 @@
     "content": "look at this funny tweet i hope no one will delete it",
     "created_at": "2022-06-21 16:13:32.392607",
     "updated_at": "2022-06-21 21:13:47.530000+00:00",
-    "by" : "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "by": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
     "tweet_id": "6eb8d65c-3a52-4c58-9db5-705ce506d22c"
   },
   {
@@ -28,10 +28,10 @@
     "tweet_id": "db1dc1a2-86f5-452a-895a-f5644408cb24"
   },
   {
-    "content": "string",
+    "content": "This content is the same as before but updated",
     "by": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
     "tweet_id": "622f9faf-9efe-4065-b901-12f66c740583",
     "created_at": "2022-06-23 22:40:21.784004",
-    "updated_at": "2022-06-23 22:40:21.784004"
+    "updated_at": "2022-06-23 22:58:11.737493"
   }
 ]

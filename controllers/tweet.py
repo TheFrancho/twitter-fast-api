@@ -9,7 +9,7 @@ from fastapi import APIRouter, status
 from fastapi import Body, Path, HTTPException
 
 #models modules
-from models.tweet import Tweet, CreateTweet
+from models.tweet import Tweet, CreateTweet, UpdateTweet
 
 router = APIRouter(
     prefix="/tweets",
@@ -128,7 +128,7 @@ def update_tweet(
     tweet_id : UUID = Path(
         ...,
     ),
-    tweet : CreateTweet = Body(
+    tweet : UpdateTweet = Body(
         ...,
     )
 ):
@@ -139,6 +139,9 @@ def update_tweet(
             if find["tweet_id"] == str(tweet_id):
                 tweet_dict = tweet.dict()
                 tweet_dict["tweet_id"] = str(tweet_id)
+                tweet_dict["created_at"] = find["created_at"]
+                tweet_dict["updated_at"] = datetime.now()
+                tweet_dict["by"] = find["by"]
                 for keys in find.keys():
                     if keys in tweet_dict.keys():
                         find[keys] = tweet_dict[keys]
