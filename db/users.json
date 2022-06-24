@@ -3,33 +3,33 @@
     "password": "insecure123",
     "user_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
     "email": "test@test.com",
-    "first_name": "Sisas",
-    "last_name": "Nonas",
-    "birth_date": "2022-06-20 17:06:15.159764"
+    "first_name": "edit",
+    "last_name": "so edit",
+    "birth_date": "1999-02-02"
   },
   {
     "password": "insecure123",
     "user_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
     "email": "test@test.com",
-    "first_name": "Sisas",
-    "last_name": "Nonas",
-    "birth_date": "2022-06-20 17:07:20.583221"
+    "first_name": "string",
+    "last_name": "string",
+    "birth_date": "2030-11-11"
   },
   {
     "password": "pretty_secure123",
     "user_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
     "email": "yes@yes.com",
-    "first_name": "Sisas",
-    "last_name": "Nonas",
-    "birth_date": "2022-06-20 17:08:08.978655"
+    "first_name": "string",
+    "last_name": "string",
+    "birth_date": "2030-11-11"
   },
   {
     "password": "villllllla",
     "user_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
     "email": "villa@121.com",
-    "first_name": "villa",
-    "last_name": "121",
-    "birth_date": "2022-06-20 17:08:36.177869"
+    "first_name": "string",
+    "last_name": "string",
+    "birth_date": "2030-11-11"
   },
   {
     "password": "password121",

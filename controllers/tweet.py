@@ -132,24 +132,41 @@ def update_tweet(
         ...,
     )
 ):
+    '''
+    Updates a tweet
+
+    Updates the content of a Tweet
+
+    Parameters:
+        - Path parameters:
+            - tweet_id : UUID
+        - Body:
+            - tweet : UpdateTweet
+    
+    Returns a json list with the tweet info in the app with the following keys
+        - tweet_id : UUID
+        - content : str,
+        - created_at : datetime,
+        - updated_at : datetime,
+        - by : UUID,
+    '''
     with open("db/tweets.json", "r+", encoding = 'utf-8') as f:
         tweet_dict = None
         results = json.load(f)
         for find in results:
             if find["tweet_id"] == str(tweet_id):
                 tweet_dict = tweet.dict()
-                tweet_dict["tweet_id"] = str(tweet_id)
-                tweet_dict["created_at"] = find["created_at"]
-                tweet_dict["updated_at"] = datetime.now()
-                tweet_dict["by"] = find["by"]
                 for keys in find.keys():
                     if keys in tweet_dict.keys():
                         find[keys] = tweet_dict[keys]
+                tweet_dict["updated_at"] = datetime.now()
+                tweet_dict = find.copy()
+                break
         if tweet_dict:
             f.truncate(0)
             f.seek(0)
             json.dump(results, f, indent=2, default=str)
-            return tweet_dict
+            return Tweet(**tweet_dict)
         else:
             raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Tweet not found")
 
@@ -165,6 +182,22 @@ def delete_tweet(
         ...,
     )
 ):
+    '''
+    Delete Tweet
+
+    Delete the selected Tweet
+
+    Parameters:
+        - Path parameters:
+            - tweet_id : UUID
+    
+    Returns a json object with the deleted Tweet info in the app with the following keys
+        - tweet_id : UUID
+        - content : str,
+        - created_at : datetime,
+        - updated_at : Optional[datetime],
+        - by : User
+    '''
     with open("db/tweets.json", "r+", encoding = 'utf-8') as f:
         results = json.load(f)
         index_to_delete = None

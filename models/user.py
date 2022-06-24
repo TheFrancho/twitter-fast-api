@@ -46,3 +46,18 @@ class UserRegister(User, PasswordMixin):
 
 class UserLogin(UserBase, PasswordMixin):
     pass
+
+class UserEdit(BaseModel):
+    first_name : Optional[str] = Field(
+        default = None,
+        min_length=1,
+        max_length=50,
+    )
+    last_name : Optional[str] = Field(
+        default = None,
+        min_length=1,
+        max_length=50,
+    )
+    birth_date : Optional[date] = Field(
+        default = None,
+    )
