@@ -1,0 +1,54 @@
+[
+  {
+    "content": "The first tweet ever, again",
+    "created_at": "2022-06-21 16:13:32.392607",
+    "updated_at": "2022-06-21 21:13:47.530000+00:00",
+    "by": {
+      "user_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "email": "user@example.com",
+      "first_name": "yes",
+      "last_name": "no",
+      "birth_date": "1999-05-03"
+    },
+    "tweet_id": "97b6eefc-db5b-4b3e-bddd-a000f783341b"
+  },
+  {
+    "content": "The first tweet ever, again",
+    "created_at": "2022-06-21 16:13:32.392607",
+    "updated_at": "2022-06-21 21:13:47.530000+00:00",
+    "by": {
+      "user_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "email": "user@example.com",
+      "first_name": "yesss",
+      "last_name": "nooo",
+      "birth_date": "1999-05-03"
+    },
+    "tweet_id": "706f2b97-c640-4cf2-8eea-ccc800f3ff68"
+  },
+  {
+    "content": "look at this funny tweet i hope no one will delete it",
+    "created_at": "2022-06-21 16:13:32.392607",
+    "updated_at": "2022-06-21 21:13:47.530000+00:00",
+    "by": {
+      "user_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "email": "villa@121.com",
+      "first_name": "yesss",
+      "last_name": "nooo",
+      "birth_date": "1999-05-03"
+    },
+    "tweet_id": "6eb8d65c-3a52-4c58-9db5-705ce506d22c"
+  },
+  {
+    "content": "string",
+    "created_at": "2022-06-22 19:28:20.169612",
+    "updated_at": "2022-06-23 00:30:10.805000+00:00",
+    "by": {
+      "user_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "email": "user@example.com",
+      "first_name": "string",
+      "last_name": "string",
+      "birth_date": "2022-06-23"
+    },
+    "tweet_id": "db1dc1a2-86f5-452a-895a-f5644408cb24"
+  }
+]

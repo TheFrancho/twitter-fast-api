@@ -1,2 +1,2 @@
-from .user import UserBase, UserLogin, User
+from .user import UserBase, UserLogin, UserRegister,  User
 from .tweet import Tweet

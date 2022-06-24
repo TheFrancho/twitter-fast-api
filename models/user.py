@@ -10,6 +10,14 @@ from pydantic import EmailStr
 from pydantic import Field
 
 
+class PasswordMixin(BaseModel):
+    password : str = Field(
+        ...,
+        min_lenght = 8,
+        max_lenght = 64,
+        example = "password",
+    )
+
 class UserBase(BaseModel):
     user_id : UUID = Field(
         ...,
@@ -18,15 +26,6 @@ class UserBase(BaseModel):
     email : EmailStr = Field(
         ...,
     )
-
-
-class UserLogin(UserBase):
-    password : str = Field(
-        ...,
-        min_lenght = 8,
-        max_lenght = 16,
-    )
-
 
 class User(UserBase):
     first_name : str = Field(
@@ -42,3 +41,9 @@ class User(UserBase):
     birth_date : Optional[date] = Field(
         default = None,
     )
+
+class UserRegister(User, PasswordMixin):
+    pass
+
+class UserLogin(UserBase, PasswordMixin):
+    pass

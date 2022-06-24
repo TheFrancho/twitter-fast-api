@@ -11,8 +11,7 @@ from pydantic import Field
 #Other models
 from .user import User
 
-class Tweet(BaseModel):
-    tweet_id : UUID = Field(...)
+class CreateTweet(BaseModel):
     content : str = Field(
         ...,
         min_lenght = 1,
@@ -21,3 +20,6 @@ class Tweet(BaseModel):
     created_at : datetime = Field(default = datetime.now())
     updated_at : Optional[datetime] = Field(default = None)
     by : User = Field(...)
+
+class Tweet(CreateTweet):
+    tweet_id : UUID = Field(...)
