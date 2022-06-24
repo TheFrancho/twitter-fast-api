@@ -1,7 +1,8 @@
 #python libraries
 from typing import List
 import json
-from datetime import datetime
+from datetime import datetime, date
+from uuid import UUID, uuid4
 
 #fastapi packages
 from fastapi import APIRouter, status
@@ -47,15 +48,13 @@ def signup(
     with open("db/users.json", "r+", encoding = 'utf-8') as f:
         results = json.load(f)
         user_dict = user.dict()
-        user_dict["user_id"] = str(user_dict["user_id"])
-        if user_dict["birth_date"] :
-            user_dict["birth_date"] = str(user_dict["birth_date"])
-        else:
-            user_dict["birth_date"] = str(datetime.now())
+        user_dict["user_id"] = uuid4()
+        if not user_dict["birth_date"] :
+            user_dict["birth_date"] = date(1999, 1, 1)
         results.append(user_dict)
         f.seek(0)
         json.dump(results, f, indent=2, default=str)
-        return user
+        return User(**user_dict)
 
 
 @router.post(

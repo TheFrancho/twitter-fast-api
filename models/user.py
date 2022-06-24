@@ -19,15 +19,14 @@ class PasswordMixin(BaseModel):
     )
 
 class UserBase(BaseModel):
-    user_id : UUID = Field(
-        ...,
-
-    )
     email : EmailStr = Field(
         ...,
     )
 
 class User(UserBase):
+    user_id : Optional[UUID] = Field(
+        default = None
+    )
     first_name : str = Field(
         ...,
         min_length=1,

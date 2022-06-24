@@ -30,5 +30,29 @@
     "first_name": "villa",
     "last_name": "121",
     "birth_date": "2022-06-20 17:08:36.177869"
+  },
+  {
+    "password": "password121",
+    "email": "je@je.com",
+    "user_id": "a92e1fc8-8d18-4dad-b7bb-4cee872b0d64",
+    "first_name": "string",
+    "last_name": "string",
+    "birth_date": "2022-06-24"
+  },
+  {
+    "password": "password121111111",
+    "email": "no@ni.com",
+    "user_id": "135b0815-f0b8-4e8b-ae52-ea79190c6bd2",
+    "first_name": "111",
+    "last_name": "222",
+    "birth_date": "2022-06-24"
+  },
+  {
+    "password": "cpapussss",
+    "email": "si@ni.com",
+    "user_id": "7432e89f-7284-4f23-98dc-cb2e2c706b52",
+    "first_name": "121211",
+    "last_name": "323242323",
+    "birth_date": "1999-01-01"
   }
 ]
