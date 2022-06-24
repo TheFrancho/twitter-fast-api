@@ -146,6 +146,7 @@ def update_tweet(
                     if keys in tweet_dict.keys():
                         find[keys] = tweet_dict[keys]
         if tweet_dict:
+            f.truncate(0)
             f.seek(0)
             json.dump(results, f, indent=2, default=str)
             return tweet_dict
