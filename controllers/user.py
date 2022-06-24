@@ -5,11 +5,11 @@ from datetime import datetime, date
 from uuid import UUID, uuid4
 
 #fastapi packages
-from fastapi import APIRouter, status
+from fastapi import APIRouter, status, HTTPException
 from fastapi import Body
 
 #models modules
-from models.user import User, UserRegister
+from models.user import User, UserRegister, UserLogin
 
 
 router = APIRouter(
@@ -59,12 +59,21 @@ def signup(
 
 @router.post(
     path = "/login",
-    response_model = User,
     status_code = status.HTTP_200_OK,
     summary = "Log in a new user",
 )
-def login():
-    pass
+def login(
+    login : UserLogin = Body(
+        ...,
+    )
+):
+    with open("db/users.json", "r+", encoding = 'utf-8') as f:
+        results = json.load(f)
+        login_dict = login.dict()
+        for find in results:
+            if find["email"] == login_dict["email"] and find["password"] == login_dict["password"]:
+                return {"status" : "log in"}
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="User or Password do not match")
 
 
 @router.get(
