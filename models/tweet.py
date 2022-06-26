@@ -5,7 +5,6 @@ from typing import Optional
 
 #Pydantic modules
 from pydantic import BaseModel
-from pydantic import EmailStr
 from pydantic import Field
 
 #Other models

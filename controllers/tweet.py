@@ -62,24 +62,43 @@ def post_tweet(
 
     Parameters:
         - Request Body Parameters:
-            - tweet : Tweet
+            - tweet : CreateTweet
 
     Returns a json the basic tweet information
         - tweet_id : UUID
         - content : str,
         - created_at : datetime,
         - updated_at : Optional[datetime],
-        - by : User
+        - by : UUID
     '''
-    with open("db/tweets.json", "r+", encoding = 'utf-8') as f:
+    with open("db/tweets.json", "r+", encoding = 'utf-8') as f, open("db/tweets_per_person.json", "r+", encoding = 'utf-8') as logic_f:
         results = json.load(f)
         tweet_dict = tweet.dict()
         tweet_dict["tweet_id"] = uuid4()
         tweet_dict["created_at"] = datetime.now()
         tweet_dict["updated_at"] = tweet_dict["created_at"]
         results.append(tweet_dict)
+
+
+        logic  = json.load(logic_f)
+
+        found = False
+
+        for find in logic:
+            print(list(find.keys())[0])
+            print()
+            if str(tweet_dict["by"]) == list(find.keys())[0]:
+                found = True
+                find[str(tweet_dict["by"])].append(tweet_dict["tweet_id"])
+                break
+
+        if not found:
+            raise HTTPException(status.HTTP_400_BAD_REQUEST, detail="Tweet author does not exist")
+
         f.seek(0)
         json.dump(results, f, indent=2, default=str)
+        logic_f.seek(0)
+        json.dump(logic, logic_f, indent=2, default=str)
         return Tweet(**tweet_dict)
 
 

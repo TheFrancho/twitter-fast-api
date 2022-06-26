@@ -54,5 +54,21 @@
     "first_name": "121211",
     "last_name": "323242323",
     "birth_date": "1999-01-01"
+  },
+  {
+    "password": "12345678",
+    "email": "register@toregister.com",
+    "user_id": "8bf60f8e-78d8-475a-b86b-c492e3af75ab",
+    "first_name": "kkkkkkk",
+    "last_name": "macaco",
+    "birth_date": "2022-06-26"
+  },
+  {
+    "password": "87654321",
+    "email": "sopa@macaco.com",
+    "user_id": "4dd3503b-261d-4e64-af2f-92213bc5bbdb",
+    "first_name": "sisas",
+    "last_name": "cuchita",
+    "birth_date": "1111-02-02"
   }
 ]

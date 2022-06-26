@@ -45,15 +45,26 @@ def signup(
         - last_name : str,
         - birth_date : Optional[date],
     '''
-    with open("db/users.json", "r+", encoding = 'utf-8') as f:
+    with open("db/users.json", "r+", encoding = 'utf-8') as f, open("db/tweets_per_person.json", "r+", encoding = 'utf-8') as logic_f:
         results = json.load(f)
         user_dict = user.dict()
         user_dict["user_id"] = uuid4()
+
         if not user_dict["birth_date"] :
             user_dict["birth_date"] = date(1999, 1, 1)
+
         results.append(user_dict)
+
+        logic  = json.load(logic_f)
+        new_register = {str(user_dict["user_id"]) : []}
+        logic.append(new_register)
+
         f.seek(0)
         json.dump(results, f, indent=2, default=str)
+        logic_f.seek(0)
+        json.dump(logic, logic_f, indent=2, default=str)
+
+
         return User(**user_dict)
 
 
