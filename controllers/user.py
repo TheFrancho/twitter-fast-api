@@ -241,7 +241,10 @@ def delete_user(
     '''
     with open("db/users.json", "r+", encoding = 'utf-8') as f, open("db/tweets_per_person.json", "r+", encoding = 'utf-8') as logic_f:
         results = json.load(f)
+        logic  = json.load(logic_f)
+
         index_to_delete = None
+        register_to_delete = None
 
         for en, find in enumerate(results):
             if find["user_id"] == str(user_id):
@@ -249,11 +252,23 @@ def delete_user(
                 to_delete = results.pop(index_to_delete)
                 break
 
-        if index_to_delete:
+        for en, find in enumerate(logic):
+            for search in find.keys():
+                if search == str(user_id):
+                    register_to_delete = logic.pop(en)
+                    print(register_to_delete)
+                    break
+
+        if to_delete and register_to_delete:
             f.truncate(0)
             f.seek(0)
             json.dump(results, f, indent=2, default=str)
+
+            logic_f.truncate(0)
+            logic_f.seek(0)
+            json.dump(logic, logic_f, indent=2, default=str)
+
             return User(**to_delete)
         else:
-            raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Tweet not found")
+            raise HTTPException(status.HTTP_404_NOT_FOUND, detail="User not found")
 
