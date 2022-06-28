@@ -47,6 +47,8 @@ def signup(
     '''
     with open("db/users.json", "r+", encoding = 'utf-8') as f, open("db/tweets_per_person.json", "r+", encoding = 'utf-8') as logic_f:
         results = json.load(f)
+        logic  = json.load(logic_f)
+
         user_dict = user.dict()
         user_dict["user_id"] = uuid4()
 
@@ -54,8 +56,7 @@ def signup(
             user_dict["birth_date"] = date(1999, 1, 1)
 
         results.append(user_dict)
-
-        logic  = json.load(logic_f)
+        
         new_register = {str(user_dict["user_id"]) : []}
         logic.append(new_register)
 
@@ -63,7 +64,6 @@ def signup(
         json.dump(results, f, indent=2, default=str)
         logic_f.seek(0)
         json.dump(logic, logic_f, indent=2, default=str)
-
 
         return User(**user_dict)
 
@@ -78,6 +78,17 @@ def login(
         ...,
     )
 ):
+    '''
+    Log in
+
+    Log in the user into the app
+
+    Parameters:
+        - Body Parameters:
+            - login : UserLogin
+    
+    Returns the status if the login was successful (to do)
+    '''
     with open("db/users.json", "r+", encoding = 'utf-8') as f:
         results = json.load(f)
         login_dict = login.dict()
@@ -228,14 +239,16 @@ def delete_user(
         - last_name : str,
         - birth_date : date, 
     '''
-    with open("db/users.json", "r+", encoding = 'utf-8') as f:
+    with open("db/users.json", "r+", encoding = 'utf-8') as f, open("db/tweets_per_person.json", "r+", encoding = 'utf-8') as logic_f:
         results = json.load(f)
         index_to_delete = None
+
         for en, find in enumerate(results):
             if find["user_id"] == str(user_id):
                 index_to_delete = en
                 to_delete = results.pop(index_to_delete)
                 break
+
         if index_to_delete:
             f.truncate(0)
             f.seek(0)

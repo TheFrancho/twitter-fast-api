@@ -73,20 +73,18 @@ def post_tweet(
     '''
     with open("db/tweets.json", "r+", encoding = 'utf-8') as f, open("db/tweets_per_person.json", "r+", encoding = 'utf-8') as logic_f:
         results = json.load(f)
+        logic  = json.load(logic_f)
+
         tweet_dict = tweet.dict()
         tweet_dict["tweet_id"] = uuid4()
         tweet_dict["created_at"] = datetime.now()
         tweet_dict["updated_at"] = tweet_dict["created_at"]
+
         results.append(tweet_dict)
-
-
-        logic  = json.load(logic_f)
 
         found = False
 
         for find in logic:
-            print(list(find.keys())[0])
-            print()
             if str(tweet_dict["by"]) == list(find.keys())[0]:
                 found = True
                 find[str(tweet_dict["by"])].append(tweet_dict["tweet_id"])
@@ -99,6 +97,7 @@ def post_tweet(
         json.dump(results, f, indent=2, default=str)
         logic_f.seek(0)
         json.dump(logic, logic_f, indent=2, default=str)
+
         return Tweet(**tweet_dict)
 
 
@@ -217,18 +216,37 @@ def delete_tweet(
         - updated_at : Optional[datetime],
         - by : User
     '''
-    with open("db/tweets.json", "r+", encoding = 'utf-8') as f:
+    with open("db/tweets.json", "r+", encoding = 'utf-8') as f, open("db/tweets_per_person.json", "r+", encoding = 'utf-8') as logic_f:
         results = json.load(f)
+        logic  = json.load(logic_f)
+
         index_to_delete = None
+
+        register_to_delete = None
+
         for en, find in enumerate(results):
             if find["tweet_id"] == str(tweet_id):
                 index_to_delete = en
                 to_delete = results.pop(index_to_delete)
                 break
-        if index_to_delete:
+
+        for en, find in enumerate(logic):
+            for search in find.values():
+                try:
+                    register_to_delete = search.index(str(tweet_id))
+                    logic[en][to_delete["by"]].pop(register_to_delete)
+                except:
+                    continue
+
+        if index_to_delete and register_to_delete:
             f.truncate(0)
             f.seek(0)
             json.dump(results, f, indent=2, default=str)
+
+            logic_f.truncate(0)
+            logic_f.seek(0)
+            json.dump(logic, logic_f, indent=2, default=str)
+
             return to_delete
         else:
             raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Tweet not found")
