@@ -6,7 +6,6 @@ from typing import Optional, Dict, List
 
 #Pydantic modules
 from pydantic import BaseModel
-from pydantic import EmailStr
 from pydantic import Field
 
 class TweetsPerPerson(BaseModel):

@@ -70,5 +70,13 @@
     "first_name": "sisas",
     "last_name": "cuchita",
     "birth_date": "1111-02-02"
+  },
+  {
+    "password": "dejamedormirmmgvo123",
+    "email": "no@si.com",
+    "user_id": "7a932e41-d2b6-49d8-8d00-51e00f04f389",
+    "first_name": "mauri",
+    "last_name": "dejame dormir",
+    "birth_date": "1999-01-02"
   }
 ]
