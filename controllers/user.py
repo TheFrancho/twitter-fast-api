@@ -239,12 +239,14 @@ def delete_user(
         - last_name : str,
         - birth_date : date, 
     '''
-    with open("db/users.json", "r+", encoding = 'utf-8') as f, open("db/tweets_per_person.json", "r+", encoding = 'utf-8') as logic_f:
+    with open("db/users.json", "r+", encoding = 'utf-8') as f, open("db/tweets_per_person.json", "r+", encoding = 'utf-8') as logic_f, open("db/tweets.json", "r+", encoding = 'utf-8') as tweets:
         results = json.load(f)
         logic  = json.load(logic_f)
+        delete_tweets = json.load(tweets)
 
         index_to_delete = None
         register_to_delete = None
+        tweets_to_delete = []
 
         for en, find in enumerate(results):
             if find["user_id"] == str(user_id):
@@ -256,8 +258,14 @@ def delete_user(
             for search in find.keys():
                 if search == str(user_id):
                     register_to_delete = logic.pop(en)
-                    print(register_to_delete)
                     break
+
+        for en, find in enumerate(delete_tweets):
+            if find["by"] == str(user_id):
+                tweets_to_delete.append(en)
+        
+        for deleting in reversed(tweets_to_delete):
+            delete_tweets.pop(deleting)
 
         if to_delete and register_to_delete:
             f.truncate(0)
@@ -267,6 +275,10 @@ def delete_user(
             logic_f.truncate(0)
             logic_f.seek(0)
             json.dump(logic, logic_f, indent=2, default=str)
+
+            tweets.truncate(0)
+            tweets.seek(0)
+            json.dump(delete_tweets, tweets, indent=2, default=str)
 
             return User(**to_delete)
         else:
