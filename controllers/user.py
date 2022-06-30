@@ -26,24 +26,24 @@ router = APIRouter(
 )
 def signup(
     user : UserRegister = Body(
-        ...,
+        ...
     )
 ):
     '''
-    Sign up
+    **Sign up**
 
     Register a new user in the app
 
     Parameters:
-        - Request Body Parameters:
-            - user: UserRegister
+    - Request body parameter
+        - user: UserRegister
 
-    Returns a json with the basic user information
-        - user_id : UUID
-        - email : EmailStr,
-        - first_name : str,
-        - last_name : str,
-        - birth_date : Optional[date],
+    Returns a json object with the basic user information:
+    - user_id : UUID
+    - email : EmailStr,
+    - first_name : str,
+    - last_name : str,
+    - birth_date : Optional[date]
     '''
     with open("db/users.json", "r+", encoding = 'utf-8') as f, open("db/tweets_per_person.json", "r+", encoding = 'utf-8') as logic_f:
         results = json.load(f)
@@ -71,7 +71,7 @@ def signup(
 @router.post(
     path = "/login",
     status_code = status.HTTP_200_OK,
-    summary = "Log in a new user",
+    summary = "Log in a user",
 )
 def login(
     login : UserLogin = Body(
@@ -79,13 +79,13 @@ def login(
     )
 ):
     '''
-    Log in
+    **Log in**
 
-    Log in the user into the app
+    Login the user into the app
 
     Parameters:
-        - Body Parameters:
-            - login : UserLogin
+    - Body Parameters:
+        - login : UserLogin
     
     Returns the status if the login was successful (to do)
     '''
@@ -105,19 +105,18 @@ def login(
 )
 def show_all_users():
     '''
-    Show all users
+    **Show all users**
 
-    Show all users in the db
+    Show all stored users in the DB
 
-    Parameters:
-        - 
+    Parameters: No needed
     
-    Returns a json list with all users in the app with the following keys
-        - user_id : UUID
-        - email : EmailStr,
-        - first_name : str,
-        - last_name : str,
-        - birth_date : Optional[date],
+    Returns a a list of json objects of all users in the app with the following keys
+    - user_id : UUID
+    - email : EmailStr,
+    - first_name : str,
+    - last_name : str,
+    - birth_date : Optional[date]
     '''
     with open("db/users.json", "r", encoding = 'utf-8') as f:
         results = json.load(f)
@@ -136,20 +135,20 @@ def show_user(
     )
 ):
     '''
-    Show single user
+    **Show single user**
 
-    Show a single user by it id
+    Show a single user selected by it ID
 
     Parameters:
-        - Path parameters:
-            - user_id : UUID
+    - Path parameters:
+        - user_id : UUID
     
-    Returns a json list with the user info in the app with the following keys
-        - tweet_id : UUID
-        - email : EmailStr,
-        - first_name : str,
-        - last_name : str,
-        - birth_date : Optional[date],
+    Returns a json object with the user info in the app with the following keys
+    - user_id : UUID
+    - email : EmailStr,
+    - first_name : str,
+    - last_name : str,
+    - birth_date : Optional[date],
     '''
     with open("db/users.json", "r", encoding = 'utf-8') as f:
         results = json.load(f)
@@ -163,7 +162,7 @@ def show_user(
     path = "/users/{user_id}",
     response_model = User,
     status_code = status.HTTP_200_OK,
-    summary = "update selected user",
+    summary = "Update a user",
 )
 def update_user(
     user_id : UUID = Path(
@@ -174,22 +173,22 @@ def update_user(
     )
 ):
     '''
-    Update user
+    **Update user**
 
     Updates the user information
 
     Parameters:
-        - Path parameters:
-            - user_id : UUID
-        - Body Parameters:
-            - user : UserEdit
-    
-    Returns a json list with the user info in the app with the following keys
+    - Path parameters:
         - user_id : UUID
-        - email : EmailStr,
-        - first_name : str,
-        - last_name : str,
-        - birth_date : date,
+    - Body Parameters:
+        - user : UserEdit
+    
+    Returns a json object of the user info with the following keys
+    - user_id : UUID
+    - email : EmailStr,
+    - first_name : str,
+    - last_name : str,
+    - birth_date : date
     '''
     with open("db/users.json", "r+", encoding = 'utf-8') as f:
         user_dict = None
@@ -198,7 +197,7 @@ def update_user(
             if find["user_id"] == str(user_id):
                 user_dict = edit_user.dict()
                 for keys in find.keys():
-                    if keys in user_dict.keys():
+                    if keys in user_dict.keys() and user_dict[keys]:
                         find[keys] = user_dict[keys]
                 user_dict = find.copy()
                 break
@@ -224,20 +223,20 @@ def delete_user(
     )
 ):
     '''
-    Delete user
+    **Delete user**
 
-    Delete the selected user
+    Deletes the selected user from the DataBase
 
     Parameters:
-        - Path parameters:
-            - user_id : UUID
+    - Path parameters:
+        - user_id : UUID
     
     Returns a json object with the deleted user info with the following keys:
-        - user_id : UUID
-        - email : EmailStr,
-        - first_name : str,
-        - last_name : str,
-        - birth_date : date, 
+    - user_id : UUID
+    - email : EmailStr,
+    - first_name : str,
+    - last_name : str,
+    - birth_date : date
     '''
     with open("db/users.json", "r+", encoding = 'utf-8') as f, open("db/tweets_per_person.json", "r+", encoding = 'utf-8') as logic_f, open("db/tweets.json", "r+", encoding = 'utf-8') as tweets:
         results = json.load(f)
@@ -283,4 +282,3 @@ def delete_user(
             return User(**to_delete)
         else:
             raise HTTPException(status.HTTP_404_NOT_FOUND, detail="User not found")
-

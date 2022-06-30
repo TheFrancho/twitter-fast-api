@@ -25,19 +25,18 @@ router = APIRouter(
 )
 def home():
     '''
-    Show all tweets
+    **Show all tweets**
 
     Show all the tweets stored in the db
 
-    Parameters:
-        - 
+    Parameters: No required
     
-    Returns a json list with all tweets in the app with the following keys
-        - tweet_id : UUID
-        - content : str,
-        - created_at : datetime,
-        - updated_at : datetime,
-        - by : User,
+    Returns a list  of json objects of all tweets in the app with the following keys
+    - tweet_id : UUID
+    - content : str,
+    - created_at : datetime,
+    - updated_at : datetime,
+    - by : User
     '''
     with open("db/tweets.json", "r", encoding = 'utf-8') as f:
         results = json.load(f)
@@ -56,20 +55,20 @@ def post_tweet(
     )
 ):
     '''
-    Post Tweet
+    **Post Tweet**
 
     Post a Tweet in the app
 
     Parameters:
-        - Request Body Parameters:
-            - tweet : CreateTweet
+    - Request Body Parameters:
+        - tweet : CreateTweet
 
-    Returns a json the basic tweet information
-        - tweet_id : UUID
-        - content : str,
-        - created_at : datetime,
-        - updated_at : Optional[datetime],
-        - by : UUID
+    Returns a json object with the basic tweet information
+    - tweet_id : UUID
+    - content : str,
+    - created_at : datetime,
+    - updated_at : Optional[datetime],
+    - by : UUID
     '''
     with open("db/tweets.json", "r+", encoding = 'utf-8') as f, open("db/tweets_per_person.json", "r+", encoding = 'utf-8') as logic_f:
         results = json.load(f)
@@ -105,7 +104,7 @@ def post_tweet(
     path = "/tweets/{tweet_id}",
     response_model = Tweet,
     status_code = status.HTTP_200_OK,
-    summary = "Show a Tweet",
+    summary = "Show selected Tweet",
 )
 def show_tweet(
     tweet_id: UUID = Path(
@@ -113,20 +112,20 @@ def show_tweet(
         )
 ):
     '''
-    Show single tweet
+    **Show single tweet**
 
     Show a single tweet by it id
 
     Parameters:
-        - Path parameters:
-            - tweet_id : UUID
-    
-    Returns a json list with the tweet info in the app with the following keys
+    - Path parameters:
         - tweet_id : UUID
-        - content : str,
-        - created_at : datetime,
-        - updated_at : datetime,
-        - by : User,
+    
+    Returns a json object of the tweet info in the app with the following keys
+    - tweet_id : UUID,
+    - content : str,
+    - created_at : datetime,
+    - updated_at : datetime,
+    - by : User
     '''
     with open("db/tweets.json", "r", encoding = 'utf-8') as f:
         results = json.load(f)
@@ -148,20 +147,20 @@ def show_person_tweets(
         )
 ):
     '''
-    Show all person Tweets
+    **Show all person Tweets**
 
-    Show all the Tweets posted by a person
+    Show all the Tweets posted by some person in the app
 
     Parameters:
-        - Path parameters:
-            - user_id : UUID
+    - Path parameters:
+        - user_id : UUID
     
-    Returns a json object list with the tweet info in the app with the following keys
-        - tweet_id : UUID
-        - content : str,
-        - created_at : datetime,
-        - updated_at : datetime,
-        - by : User,
+    Returns a json object list of the tweet info in the app with the following keys
+    - tweet_id : UUID
+    - content : str,
+    - created_at : datetime,
+    - updated_at : datetime,
+    - by : User
     '''
     with open("db/tweets.json", "r", encoding = 'utf-8') as f, open("db/tweets_per_person.json", "r", encoding = 'utf-8') as logic_f:
         results = json.load(f)
@@ -190,22 +189,22 @@ def update_tweet(
     )
 ):
     '''
-    Updates a tweet
+    **Updates a tweet**
 
     Updates the content of a Tweet
 
     Parameters:
-        - Path parameters:
-            - tweet_id : UUID
-        - Body:
-            - tweet : UpdateTweet
-    
-    Returns a json list with the tweet info in the app with the following keys
+    - Path Parameters:
         - tweet_id : UUID
-        - content : str,
-        - created_at : datetime,
-        - updated_at : datetime,
-        - by : UUID,
+    - Body Parameters:
+        - tweet : UpdateTweet
+    
+    Returns a json object of the tweet info updated with the following keys
+    - tweet_id : UUID
+    - content : str,
+    - created_at : datetime,
+    - updated_at : datetime,
+    - by : UUID
     '''
     with open("db/tweets.json", "r+", encoding = 'utf-8') as f:
         tweet_dict = None
@@ -240,20 +239,20 @@ def delete_tweet(
     )
 ):
     '''
-    Delete Tweet
+    **Delete Tweet**
 
-    Delete the selected Tweet
+    Delete the selected Tweet from the DataBase
 
     Parameters:
-        - Path parameters:
-            - tweet_id : UUID
-    
-    Returns a json object with the deleted Tweet info in the app with the following keys
+    - Path parameters:
         - tweet_id : UUID
-        - content : str,
-        - created_at : datetime,
-        - updated_at : Optional[datetime],
-        - by : User
+    
+    Returns a json object of the deleted Tweet info with the following keys
+    - tweet_id : UUID
+    - content : str,
+    - created_at : datetime,
+    - updated_at : Optional[datetime],
+    - by : User
     '''
     with open("db/tweets.json", "r+", encoding = 'utf-8') as f, open("db/tweets_per_person.json", "r+", encoding = 'utf-8') as logic_f:
         results = json.load(f)

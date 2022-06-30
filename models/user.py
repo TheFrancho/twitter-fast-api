@@ -59,5 +59,5 @@ class UserEdit(BaseModel):
         max_length=50,
     )
     birth_date : Optional[date] = Field(
-        default=date(1999,1,1)
+        default=None
     )
