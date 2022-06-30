@@ -24,8 +24,8 @@ class UserBase(BaseModel):
     )
 
 class User(UserBase):
-    user_id : Optional[UUID] = Field(
-        default = None
+    _user_id : Optional[UUID] = Field(
+        default = None,
     )
     first_name : str = Field(
         ...,
@@ -38,7 +38,7 @@ class User(UserBase):
         max_length=50,
     )
     birth_date : Optional[date] = Field(
-        default = None,
+        default=date(1999,1,1)
     )
 
 class UserRegister(User, PasswordMixin):
@@ -59,5 +59,5 @@ class UserEdit(BaseModel):
         max_length=50,
     )
     birth_date : Optional[date] = Field(
-        default = None,
+        default=date(1999,1,1)
     )

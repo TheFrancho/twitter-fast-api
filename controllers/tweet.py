@@ -136,6 +136,45 @@ def show_tweet(
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Tweet not found")
 
 
+@router.get(
+    path = "/person_tweet/{user_id}",
+    response_model = List[Tweet],
+    status_code = status.HTTP_200_OK,
+    summary = "Show all person Tweets",
+)
+def show_person_tweets(
+    user_id: UUID = Path(
+        ...
+        )
+):
+    '''
+    Show all person Tweets
+
+    Show all the Tweets posted by a person
+
+    Parameters:
+        - Path parameters:
+            - user_id : UUID
+    
+    Returns a json object list with the tweet info in the app with the following keys
+        - tweet_id : UUID
+        - content : str,
+        - created_at : datetime,
+        - updated_at : datetime,
+        - by : User,
+    '''
+    with open("db/tweets.json", "r", encoding = 'utf-8') as f, open("db/tweets_per_person.json", "r", encoding = 'utf-8') as logic_f:
+        results = json.load(f)
+        tweets_found = []
+        for find in results:
+            if find["by"] == str(user_id):
+                tweets_found.append(find)
+        if tweets_found:
+            return tweets_found
+        else:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Person doesn't have any tweet registered")
+
+
 @router.put(
     path = "/tweets/{tweet_id}",
     response_model = Tweet,
