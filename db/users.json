@@ -1,6 +1,6 @@
 [
   {
-    "password": "comocentroundiv",
+    "password": "$2b$12$dTmviIyR5T4iDsms4YXD..XVKT7TnBiG/8RAjWIpY1wlGhKAp.gWi",
     "email": "eri@qq.com",
     "user_id": "b3009662-29a1-481c-8c8a-e24efba56a88",
     "first_name": "eri",
@@ -8,7 +8,7 @@
     "birth_date": "2001-09-11"
   },
   {
-    "password": "npmpesa2gb",
+    "password": "$2b$12$dTmviIyR5T4iDsms4YXD..t0dO0Hx4X51iBQ0hqvPwPxjY7T.5YFi",
     "email": "ssal@olo.com",
     "user_id": "dac6a7d9-916b-485d-a465-9e2ce7df489f",
     "first_name": "salolol",
@@ -18,9 +18,17 @@
   {
     "password": "kkkkkkkkk",
     "email": "cascado@cascado.com",
-    "first_name": "kkkkkk",
+    "first_name": "$2b$12$dTmviIyR5T4iDsms4YXD..X3z3GxCTg1gEE.KSmU1a1SWVjL8JweW",
     "last_name": "sisas",
     "birth_date": "2020-01-03",
     "user_id": "79a3d58e-a551-487f-abba-81d1d352184a"
+  },
+  {
+    "password": "$2b$12$EdCLV4EP3vPAnxdbouxSue/mtqCJKBcLx4Qvkv95hZcC7xUvHElwa",
+    "email": "user@example.com",
+    "first_name": "string",
+    "last_name": "string",
+    "birth_date": "1999-01-01",
+    "user_id": "04162c77-0ae6-4cda-a424-7813eca935ab"
   }
 ]

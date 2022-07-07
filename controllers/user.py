@@ -3,11 +3,11 @@ from typing import List
 import json
 from datetime import datetime, date
 from uuid import UUID, uuid4
-
 #fastapi packages
 from fastapi import APIRouter, Path, status, HTTPException
 from fastapi import Body
-
+#Other packages
+import bcrypt
 #models modules
 from models.user import User, UserRegister, UserLogin, UserEdit
 
@@ -55,6 +55,11 @@ def signup(
         if not user_dict["birth_date"] :
             user_dict["birth_date"] = date(1999, 1, 1)
 
+        byte_passw = user_dict["password"].encode('utf-8')
+        salt_gen = bcrypt.gensalt()
+        hash_passw = bcrypt.hashpw(byte_passw, salt_gen)
+        user_dict["password"] = str(hash_passw.decode('utf-8'))
+
         results.append(user_dict)
         
         new_register = {str(user_dict["user_id"]) : []}
@@ -93,7 +98,7 @@ def login(
         results = json.load(f)
         login_dict = login.dict()
         for find in results:
-            if find["email"] == login_dict["email"] and find["password"] == login_dict["password"]:
+            if find["email"] == login_dict["email"] and bcrypt.checkpw(login_dict["password"].encode('utf-8'), find["password"].encode('utf-8')):
                 return {"status" : "log in"}
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail="User or Password do not match")
 

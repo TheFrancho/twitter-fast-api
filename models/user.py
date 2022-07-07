@@ -14,7 +14,7 @@ class PasswordMixin(BaseModel):
     password : str = Field(
         ...,
         min_lenght = 8,
-        max_lenght = 64,
+        max_lenght = 256,
         example = "password",
     )
 
