@@ -1,7 +1,6 @@
 #python libraries
-from typing import List
 import json
-from datetime import datetime, date
+from datetime import date
 from uuid import UUID, uuid4
 #fastapi packages
 from fastapi import APIRouter, Path, status, HTTPException
@@ -10,7 +9,8 @@ from fastapi import Body
 import bcrypt
 #models modules
 from models.user import User, UserRegister, UserLogin, UserEdit
-
+#views modules
+from views.user import UserHandler
 
 router = APIRouter(
     prefix="/users",
@@ -45,62 +45,20 @@ def signup(
     - last_name : str,
     - birth_date : Optional[date]
     '''
-    with open("db/users.json", "r+", encoding = 'utf-8') as f, open("db/tweets_per_person.json", "r+", encoding = 'utf-8') as logic_f:
-        results = json.load(f)
-        logic  = json.load(logic_f)
+    user_handler = UserHandler()
 
-        user_dict = user.dict()
-        user_dict["user_id"] = uuid4()
+    results = user_handler.load_data("users")
+    logic = user_handler.load_data("tweets_per_person")
 
-        if not user_dict["birth_date"] :
-            user_dict["birth_date"] = date(1999, 1, 1)
+    user_dict = user.dict()
+    user_dict, results = user_handler.setup_user(results, user_dict)
 
-        byte_passw = user_dict["password"].encode('utf-8')
-        salt_gen = bcrypt.gensalt()
-        hash_passw = bcrypt.hashpw(byte_passw, salt_gen)
-        user_dict["password"] = str(hash_passw.decode('utf-8'))
+    logic = user_handler.setup_register(logic, user_dict)
 
-        results.append(user_dict)
-        
-        new_register = {str(user_dict["user_id"]) : []}
-        logic.append(new_register)
+    user_handler.save_data("users", results)
+    user_handler.save_data("tweets_per_person", logic)
 
-        f.seek(0)
-        json.dump(results, f, indent=2, default=str)
-        logic_f.seek(0)
-        json.dump(logic, logic_f, indent=2, default=str)
-
-        return User(**user_dict)
-
-
-@router.post(
-    path = "/login",
-    status_code = status.HTTP_200_OK,
-    summary = "Log in a user",
-)
-def login(
-    login : UserLogin = Body(
-        ...,
-    )
-):
-    '''
-    **Log in**
-
-    Login the user into the app
-
-    Parameters:
-    - Body Parameters:
-        - login : UserLogin
-    
-    Returns the status if the login was successful (to do)
-    '''
-    with open("db/users.json", "r+", encoding = 'utf-8') as f:
-        results = json.load(f)
-        login_dict = login.dict()
-        for find in results:
-            if find["email"] == login_dict["email"] and bcrypt.checkpw(login_dict["password"].encode('utf-8'), find["password"].encode('utf-8')):
-                return {"status" : "log in"}
-        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="User or Password do not match")
+    return User(**user_dict)
 
 
 @router.get(
@@ -123,9 +81,9 @@ def show_all_users():
     - last_name : str,
     - birth_date : Optional[date]
     '''
-    with open("db/users.json", "r", encoding = 'utf-8') as f:
-        results = json.load(f)
-        return results
+    user_handler = UserHandler()
+    results = user_handler.load_data("users")
+    return results
 
 
 @router.get(
@@ -155,11 +113,12 @@ def show_user(
     - last_name : str,
     - birth_date : Optional[date],
     '''
-    with open("db/users.json", "r", encoding = 'utf-8') as f:
-        results = json.load(f)
-        for find in results:
-            if find["user_id"] == str(user_id):
-                return User(**find)
+    user_handler = UserHandler()
+    results = user_handler.load_data("users")
+    found = user_handler.find_user(str(user_id), results)
+    if found:
+        return User(**found)
+    else:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail="User not found")
 
 
@@ -195,24 +154,18 @@ def update_user(
     - last_name : str,
     - birth_date : date
     '''
-    with open("db/users.json", "r+", encoding = 'utf-8') as f:
-        user_dict = None
-        results = json.load(f)
-        for find in results:
-            if find["user_id"] == str(user_id):
-                user_dict = edit_user.dict()
-                for keys in find.keys():
-                    if keys in user_dict.keys() and user_dict[keys]:
-                        find[keys] = user_dict[keys]
-                user_dict = find.copy()
-                break
-        if user_dict:
-            f.truncate(0)
-            f.seek(0)
-            json.dump(results, f, indent=2, default=str)
-            return User(**user_dict)
-        else:
-            raise HTTPException(status.HTTP_404_NOT_FOUND, detail="User not found")
+    user_handler = UserHandler()
+    results = user_handler.load_data("users")
+
+    user_dict = None
+
+    user_dict = user_handler.edit_user_into(str(user_id), results, edit_user)
+
+    if user_dict:
+        user_handler.update_data("users", results)
+        return User(**user_dict)
+    else:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="User not found")
 
 
 @router.delete(

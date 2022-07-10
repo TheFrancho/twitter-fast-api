@@ -26,9 +26,9 @@
   {
     "password": "$2b$12$EdCLV4EP3vPAnxdbouxSue/mtqCJKBcLx4Qvkv95hZcC7xUvHElwa",
     "email": "user@example.com",
-    "first_name": "string",
-    "last_name": "string",
-    "birth_date": "1999-01-01",
+    "first_name": "lol",
+    "last_name": "relol",
+    "birth_date": "2022-07-10",
     "user_id": "04162c77-0ae6-4cda-a424-7813eca935ab"
   }
 ]
