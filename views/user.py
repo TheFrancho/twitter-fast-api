@@ -19,6 +19,13 @@ class UserHandler:
         with open(route, "r+", encoding = 'utf-8') as f:
             f.seek(0)
             json.dump(data, f, indent=2, default=str)
+    
+    def update_data(self, route, data):
+        route = "db/" + route + ".json"
+        with open(route, "r+", encoding = 'utf-8') as f:
+            f.truncate(0)
+            f.seek(0)
+            json.dump(data, f, indent=2, default=str)
 
     def setup_user(self, results, user_dict):
         user_dict["user_id"] = uuid4()
@@ -34,3 +41,20 @@ class UserHandler:
         new_register = {str(user_dict["user_id"]) : []}
         logic.append(new_register)
         return logic
+
+    def edit_user_into(self, user_id, results, user_dict):
+        for find in results:
+            if find["user_id"] == str(user_id):
+                user_dict = user_dict.dict()
+                for keys in find.keys():
+                    if keys in user_dict.keys() and user_dict[keys]:
+                        find[keys] = user_dict[keys]
+                user_dict = find.copy()
+                return user_dict
+        return None
+
+    def find_user(self, user_id, results):
+        for find in results:
+            if find["user_id"] == str(user_id):
+                return find
+        return False
