@@ -11,6 +11,7 @@ import bcrypt
 from models.user import User, UserRegister, UserLogin, UserEdit
 #views modules
 from views.user import UserHandler
+from views.tweet import TweetHandler
 
 router = APIRouter(
     prefix="/users",
@@ -196,47 +197,33 @@ def delete_user(
     - last_name : str,
     - birth_date : date
     '''
+    user_handler = UserHandler()
+    tweet_handler = TweetHandler()
+
+    results = user_handler.load_data("users")
+    logic = user_handler.load_data("tweets_per_person")
+    delete_tweets = tweet_handler.load_data("tweets")
+
     with open("db/users.json", "r+", encoding = 'utf-8') as f, open("db/tweets_per_person.json", "r+", encoding = 'utf-8') as logic_f, open("db/tweets.json", "r+", encoding = 'utf-8') as tweets:
         results = json.load(f)
         logic  = json.load(logic_f)
         delete_tweets = json.load(tweets)
 
-        index_to_delete = None
         register_to_delete = None
-        tweets_to_delete = []
 
-        for en, find in enumerate(results):
-            if find["user_id"] == str(user_id):
-                index_to_delete = en
-                to_delete = results.pop(index_to_delete)
-                break
+        user_to_delete, results = user_handler.delete_data(str(user_id), results)
 
-        for en, find in enumerate(logic):
-            for search in find.keys():
-                if search == str(user_id):
-                    register_to_delete = logic.pop(en)
-                    break
+        register_to_delete, logic = user_handler.delete_register(str(user_id), logic)
 
-        for en, find in enumerate(delete_tweets):
-            if find["by"] == str(user_id):
-                tweets_to_delete.append(en)
-        
-        for deleting in reversed(tweets_to_delete):
-            delete_tweets.pop(deleting)
+        delete_tweets = tweet_handler.delete_data(str(user_id), delete_tweets)
 
-        if to_delete and register_to_delete:
-            f.truncate(0)
-            f.seek(0)
-            json.dump(results, f, indent=2, default=str)
+        if user_to_delete and register_to_delete:
+            user_handler.update_data("users", results)
 
-            logic_f.truncate(0)
-            logic_f.seek(0)
-            json.dump(logic, logic_f, indent=2, default=str)
+            user_handler.update_data("tweets_per_person", logic)
 
-            tweets.truncate(0)
-            tweets.seek(0)
-            json.dump(delete_tweets, tweets, indent=2, default=str)
+            tweet_handler.update_data("tweets", delete_tweets)
 
-            return User(**to_delete)
+            return User(**user_to_delete)
         else:
             raise HTTPException(status.HTTP_404_NOT_FOUND, detail="User not found")
