@@ -39,5 +39,4 @@ Then you can go to your localhost on port 8000
 
 ![Alt text](static_files/docs_view.png?raw=true "General view")
 
-And you will be able to play with the API if you don't want to use any API server
-
+And you will be able to play with the API if you don't want to use any API service

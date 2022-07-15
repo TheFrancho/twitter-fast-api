@@ -30,5 +30,13 @@
     "last_name": "string",
     "birth_date": "1999-01-01",
     "user_id": "e6d51fc7-3319-48d6-9390-94da79bee6fa"
+  },
+  {
+    "password": "$2b$12$WtX.AU2jEAFgaWaSt1MSE.Dvu3HppHnG4NzxM20PAhQetNmjac092",
+    "email": "test@test.com",
+    "first_name": "string",
+    "last_name": "string",
+    "birth_date": "1999-01-01",
+    "user_id": "152fc418-fced-408b-b8bb-70121e5361f8"
   }
 ]

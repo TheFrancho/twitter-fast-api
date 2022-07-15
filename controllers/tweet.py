@@ -11,6 +11,9 @@ from fastapi import Body, Path, HTTPException
 #models modules
 from models.tweet import Tweet, CreateTweet, UpdateTweet
 
+#views modules
+from views.tweet import TweetHandler
+from views.user import UserHandler
 router = APIRouter(
     prefix="/tweets",
     tags=["Tweets"],
@@ -38,9 +41,9 @@ def home():
     - updated_at : datetime,
     - by : User
     '''
-    with open("db/tweets.json", "r", encoding = 'utf-8') as f:
-        results = json.load(f)
-        return results
+    tweet_handler = TweetHandler()
+    results = tweet_handler.load_data("tweets")
+    return results
 
 
 @router.post(
@@ -70,34 +73,23 @@ def post_tweet(
     - updated_at : Optional[datetime],
     - by : UUID
     '''
-    with open("db/tweets.json", "r+", encoding = 'utf-8') as f, open("db/tweets_per_person.json", "r+", encoding = 'utf-8') as logic_f:
-        results = json.load(f)
-        logic  = json.load(logic_f)
+    tweet_handler = TweetHandler()
+    results = tweet_handler.load_data("tweets")
+    user_handler = UserHandler()
+    logic = user_handler.load_data("tweets_per_person")
 
-        tweet_dict = tweet.dict()
-        tweet_dict["tweet_id"] = uuid4()
-        tweet_dict["created_at"] = datetime.now()
-        tweet_dict["updated_at"] = tweet_dict["created_at"]
+    tweet_dict = tweet.dict()
+    tweet_dict, results = tweet_handler.setup_tweet(results, tweet_dict)
 
-        results.append(tweet_dict)
+    found = False
+    found, logic = tweet_handler.find_register(tweet_dict, logic)
+    if not found:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, detail="Tweet author does not exist")
 
-        found = False
+    tweet_handler.save_data("tweets", results)
+    user_handler.save_data("tweets_per_person", logic)
 
-        for find in logic:
-            if str(tweet_dict["by"]) == list(find.keys())[0]:
-                found = True
-                find[str(tweet_dict["by"])].append(tweet_dict["tweet_id"])
-                break
-
-        if not found:
-            raise HTTPException(status.HTTP_400_BAD_REQUEST, detail="Tweet author does not exist")
-
-        f.seek(0)
-        json.dump(results, f, indent=2, default=str)
-        logic_f.seek(0)
-        json.dump(logic, logic_f, indent=2, default=str)
-
-        return Tweet(**tweet_dict)
+    return Tweet(**tweet_dict)
 
 
 @router.get(
