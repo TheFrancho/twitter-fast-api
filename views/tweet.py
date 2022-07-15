@@ -42,6 +42,26 @@ class TweetHandler:
         return results
 
 
+    def delete_single_tweet(self, tweet_id, results):
+        for en, find in enumerate(results):
+            if find["tweet_id"] == str(tweet_id):
+                to_delete = results.pop(en)
+                return to_delete, results
+        return False, results
+
+
+    def delete_single_register(self, tweet_id, results, to_delete):
+        for en, find in enumerate(results):
+            for search in find.values():
+                try:
+                    register_to_delete = search.index(str(tweet_id))
+                    results[en][to_delete["by"]].pop(register_to_delete)
+                    return True, results
+                except:
+                    continue
+        return False, results
+
+
     def setup_tweet(self, results, tweet_dict):
         tweet_dict["tweet_id"] = uuid4()
         tweet_dict["created_at"] = datetime.now()
@@ -49,7 +69,21 @@ class TweetHandler:
 
         results.append(tweet_dict)
         return tweet_dict, results
-    
+
+
+    def edit_tweet_into(self, tweet_id, results, tweet):
+        tweet_dict = None
+        for find in results:
+            if find["tweet_id"] == str(tweet_id):
+                tweet_dict = tweet.dict()
+                for keys in find.keys():
+                    if keys in tweet_dict.keys():
+                        find[keys] = tweet_dict[keys]
+                tweet_dict["updated_at"] = datetime.now()
+                tweet_dict = find.copy()
+                return tweet_dict, results
+        return tweet_dict, results
+
 
     def find_register(self, tweet_dict, results):
         found = False

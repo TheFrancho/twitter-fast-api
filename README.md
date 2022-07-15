@@ -12,10 +12,9 @@ The current app allows:
 - CRUD  Operations for Tweets (Create, Read (all and individual), Update and Delete)
 - Password hashing by Bcrypt
 - Automatic ID creation by UUID4
-- Register of all Tweets per Person on a new table to solve n to n dependency
+- Register of all Tweets per Person on a different table to solve n to n dependency
 - Tweets must have a valid poster
-- Cascade Deletion (if a user is deleted, all its Tweets will be deleted too)
-- TODO - Authentication
+- Cascade Deletion (if a user is deleted, all Tweets related to it will be deleted too)
 
 ***PROJECT SETUP***
 
@@ -39,4 +38,4 @@ Then you can go to your localhost on port 8000
 
 ![Alt text](static_files/docs_view.png?raw=true "General view")
 
-And you will be able to play with the API if you don't want to use any API service
+And you will be able to play with the API if you don't want to use any specific service like Postman.

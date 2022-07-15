@@ -198,25 +198,16 @@ def update_tweet(
     - updated_at : datetime,
     - by : UUID
     '''
-    with open("db/tweets.json", "r+", encoding = 'utf-8') as f:
-        tweet_dict = None
-        results = json.load(f)
-        for find in results:
-            if find["tweet_id"] == str(tweet_id):
-                tweet_dict = tweet.dict()
-                for keys in find.keys():
-                    if keys in tweet_dict.keys():
-                        find[keys] = tweet_dict[keys]
-                tweet_dict["updated_at"] = datetime.now()
-                tweet_dict = find.copy()
-                break
-        if tweet_dict:
-            f.truncate(0)
-            f.seek(0)
-            json.dump(results, f, indent=2, default=str)
-            return Tweet(**tweet_dict)
-        else:
-            raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Tweet not found")
+    tweet_handler = TweetHandler()
+    results = tweet_handler.load_data("tweets")
+
+    tweet_dict, results = tweet_handler.edit_tweet_into(tweet_id, results, tweet)
+
+    if tweet_dict:
+        tweet_handler.update_data("tweets", results)
+        return Tweet(**tweet_dict)
+    else:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Tweet not found")
 
 
 @router.delete(
@@ -246,37 +237,24 @@ def delete_tweet(
     - updated_at : Optional[datetime],
     - by : User
     '''
-    with open("db/tweets.json", "r+", encoding = 'utf-8') as f, open("db/tweets_per_person.json", "r+", encoding = 'utf-8') as logic_f:
-        results = json.load(f)
-        logic  = json.load(logic_f)
+    tweet_handler = TweetHandler()
+    user_handler = UserHandler()
 
-        index_to_delete = None
+    results = tweet_handler.load_data("tweets")
+    logic = user_handler.load_data("tweets_per_person")
+    with open("db/tweets.json", "r+", encoding = 'utf-8') as f, open("db/tweets_per_person.json", "r+", encoding = 'utf-8') as logic_f:
+
+        to_delete = None
 
         register_to_delete = None
 
-        for en, find in enumerate(results):
-            if find["tweet_id"] == str(tweet_id):
-                index_to_delete = en
-                to_delete = results.pop(index_to_delete)
-                break
+        to_delete, results = tweet_handler.delete_single_tweet(tweet_id, results)
 
-        for en, find in enumerate(logic):
-            for search in find.values():
-                try:
-                    register_to_delete = search.index(str(tweet_id))
-                    logic[en][to_delete["by"]].pop(register_to_delete)
-                except:
-                    continue
+        register_to_delete, logic = tweet_handler.delete_single_register(tweet_id, logic, to_delete)
 
-        if index_to_delete and register_to_delete:
-            f.truncate(0)
-            f.seek(0)
-            json.dump(results, f, indent=2, default=str)
-
-            logic_f.truncate(0)
-            logic_f.seek(0)
-            json.dump(logic, logic_f, indent=2, default=str)
-
+        if to_delete and register_to_delete:
+            tweet_handler.update_data("tweets", results)
+            user_handler.update_data("tweets_per_person", logic)
             return to_delete
         else:
             raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Tweet not found")
