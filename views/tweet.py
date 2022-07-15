@@ -67,3 +67,14 @@ class TweetHandler:
             if find["tweet_id"] == str(tweet_id):
                 return find
         return False
+
+    
+    def find_all_tweets_user(self, results, user_id):
+        tweets_found = []
+        for find in results:
+            if find["by"] == str(user_id):
+                tweets_found.append(find)
+        if tweets_found:
+            return tweets_found
+        else:
+            return False

@@ -83,6 +83,7 @@ def post_tweet(
 
     found = False
     found, logic = tweet_handler.find_register(tweet_dict, logic)
+
     if not found:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, detail="Tweet author does not exist")
 
@@ -119,11 +120,12 @@ def show_tweet(
     - updated_at : datetime,
     - by : User
     '''
-    with open("db/tweets.json", "r", encoding = 'utf-8') as f:
-        results = json.load(f)
-        for find in results:
-            if find["tweet_id"] == str(tweet_id):
-                return find
+    tweet_handler = TweetHandler()
+    results = tweet_handler.load_data("tweets")
+    find = tweet_handler.find_tweet(tweet_id, results)
+    if find:
+        return find
+    else:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Tweet not found")
 
 
@@ -154,16 +156,14 @@ def show_person_tweets(
     - updated_at : datetime,
     - by : User
     '''
-    with open("db/tweets.json", "r", encoding = 'utf-8') as f, open("db/tweets_per_person.json", "r", encoding = 'utf-8') as logic_f:
-        results = json.load(f)
-        tweets_found = []
-        for find in results:
-            if find["by"] == str(user_id):
-                tweets_found.append(find)
-        if tweets_found:
-            return tweets_found
-        else:
-            raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Person doesn't have any tweet registered")
+    tweet_handler = TweetHandler()
+    results = tweet_handler.load_data("tweets")
+
+    tweets_found = tweet_handler.find_all_tweets_user(results, user_id)
+    if tweets_found:
+        return tweets_found
+    else:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Person doesn't have any tweet registered")
 
 
 @router.put(
