@@ -1,8 +1,7 @@
-#Native modules
+#python libraries
 from uuid import UUID
 from datetime import date
 from typing import Optional
-
 
 #Pydantic modules
 from pydantic import BaseModel
@@ -18,10 +17,12 @@ class PasswordMixin(BaseModel):
         example = "password",
     )
 
+
 class UserBase(BaseModel):
     email : EmailStr = Field(
         ...,
     )
+
 
 class User(UserBase):
     _user_id : Optional[UUID] = Field(
@@ -41,11 +42,14 @@ class User(UserBase):
         default=date(1999,1,1)
     )
 
+
 class UserRegister(User, PasswordMixin):
     pass
 
+
 class UserLogin(UserBase, PasswordMixin):
     pass
+
 
 class UserEdit(BaseModel):
     first_name : Optional[str] = Field(

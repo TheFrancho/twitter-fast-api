@@ -1,22 +1,25 @@
 #python libraries
 import json
 from datetime import date
-from uuid import UUID, uuid4
-#fastapi packages
-from fastapi import APIRouter, Path, status, HTTPException
-from fastapi import Body
-#Other packages
-import bcrypt
+from uuid import UUID
+
 #models modules
-from models.user import User, UserRegister, UserLogin, UserEdit
+from models.user import User, UserRegister, UserEdit
+
 #views modules
 from views.user import UserHandler
 from views.tweet import TweetHandler
+
+#fastapi packages
+from fastapi import APIRouter, Path, status, HTTPException
+from fastapi import Body
+
 
 router = APIRouter(
     prefix="/users",
     tags=["Users"],
 )
+
 
 @router.post(
     path = "/signup",

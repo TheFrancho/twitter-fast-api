@@ -1,12 +1,6 @@
 #python libraries
 from typing import List
-import json
-from datetime import datetime
-from uuid import UUID, uuid4
-
-#fastapi packages
-from fastapi import APIRouter, status
-from fastapi import Body, Path, HTTPException
+from uuid import UUID
 
 #models modules
 from models.tweet import Tweet, CreateTweet, UpdateTweet
@@ -14,6 +8,12 @@ from models.tweet import Tweet, CreateTweet, UpdateTweet
 #views modules
 from views.tweet import TweetHandler
 from views.user import UserHandler
+
+#fastapi packages
+from fastapi import APIRouter, status
+from fastapi import Body, Path, HTTPException
+
+
 router = APIRouter(
     prefix="/tweets",
     tags=["Tweets"],

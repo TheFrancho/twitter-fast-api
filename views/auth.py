@@ -1,4 +1,4 @@
-#Other packages
+#python libraries
 import bcrypt
 
 class AuthHandler:

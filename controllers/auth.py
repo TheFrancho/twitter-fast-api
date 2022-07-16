@@ -1,12 +1,14 @@
-from typing import List
-import json
-
-#fastapi packages
-from fastapi import APIRouter, Path, status, HTTPException
-from fastapi import Body
+#models modules
 from models.user import UserLogin
+
+#views modules
 from views.auth import AuthHandler
 from views.user import UserHandler
+
+#fastapi packages
+from fastapi import APIRouter, status, HTTPException
+from fastapi import Body
+
 
 router = APIRouter(
     prefix="/auth",

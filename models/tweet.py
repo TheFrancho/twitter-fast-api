@@ -1,4 +1,4 @@
-#Native modules
+#python libraries
 from uuid import UUID
 from datetime import datetime
 from typing import Optional
@@ -10,6 +10,7 @@ from pydantic import Field
 #Other models
 from .user import User
 
+
 class CreateTweet(BaseModel):
     content : str = Field(
         ...,
@@ -18,12 +19,14 @@ class CreateTweet(BaseModel):
     )
     by : UUID = Field(...)
 
+
 class UpdateTweet(BaseModel):
     content : str = Field(
         ...,
         min_lenght = 1,
         max_lenght = 256,
     )
+
 
 class Tweet(CreateTweet):
     created_at : datetime = Field(default = datetime.now())

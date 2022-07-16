@@ -1,7 +1,9 @@
+#python libraries
 from uuid import uuid4
 from datetime import date
 import json
 
+#helpers modules
 from helpers.password import generate_password
 
 class UserHandler:
